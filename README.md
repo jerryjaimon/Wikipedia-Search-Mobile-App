@@ -1,7 +1,6 @@
 # wiki_api
 
-A new Flutter project.
-
+Wiki API
 ## Getting Started
 
 This project is a starting point for a Flutter application.
