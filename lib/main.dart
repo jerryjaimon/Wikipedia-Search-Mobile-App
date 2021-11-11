@@ -14,11 +14,13 @@ class WikiApi extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        //platform: TargetPlatform.iOS,
       ),
       home: const HomePage(),
     );
   }
 }
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -27,16 +29,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<PagesList> _fetchSearchResults({required String queryString}) async {
+    final response = await http.get(Uri.parse(
+        'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=50&pilimit=10&wbptterms=description&gpssearch=$queryString&gpslimit=10'));
+    if (response.statusCode == 200) {
+      return Queries.fromJson(jsonDecode(response.body)['query']).pages;
+    } else {
+      throw Exception("Failed to get response from API");
+    }
+  }
 
-  Future<SearchResults> fetchSearchResults({required String queryString}) async {
-      final response = await http.get(Uri.parse('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages%7Cpageterms&generator=prefixsearch&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=50&pilimit=10&wbptterms=description&gpssearch=$queryString&gpslimit=10'));
-      if(response.statusCode ==200){
-        print(jsonDecode(response.body)['query']['pages']);
-        return SearchResults.fromJson(jsonDecode(response.body));
-      }
-      else{
-        throw Exception("Failed to get response from API");
-      }
+  void fetchSearchResults({required String queryString}) async {
+    final searchResult = await _fetchSearchResults(queryString: queryString);
   }
 
   @override
@@ -44,35 +48,32 @@ class _HomePageState extends State<HomePage> {
     String queryString = 'null';
     var response;
     return Scaffold(
-        body:SafeArea(
-          child: Container(
-            color: Colors.white60,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: TextField(
-                    decoration: const InputDecoration(hintText: "Enter search text here!"),
-                      onChanged: (text) {
-                        queryString = text;
-                      }
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                      response = fetchSearchResults(queryString: queryString);
-                      print(response);
-                  },
-                  child: const Text('Search'),
-                )
-              ],
+        body: SafeArea(
+      child: Container(
+        color: Colors.white60,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 50,
             ),
-          ),
-        )
-    );
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextField(
+                  decoration: const InputDecoration(
+                      hintText: "Enter search text here!"),
+                  onChanged: (text) {
+                    queryString = text;
+                  }),
+            ),
+            TextButton(
+              onPressed: () {
+                fetchSearchResults(queryString: queryString);
+              },
+              child: const Text('Search'),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }
-
