@@ -42,8 +42,12 @@ class Pages {
       index: parsedJson['index'],
       thumbnail: parsedJson.containsKey('thumbnail') == true
           ? Thumbnails.fromJson(parsedJson['thumbnail'])
-          : Thumbnails(source: 'null', width: 0, height: 0),
-      terms: parsedJson.containsKey('term') == true
+          : Thumbnails(
+              source:
+                  'https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg',
+              width: 50,
+              height: 50),
+      terms: parsedJson.containsKey('terms') == true
           ? Terms.fromJson(parsedJson['terms'])
           : Terms(description: 'null'),
     );
