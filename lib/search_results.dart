@@ -78,3 +78,5 @@ class Terms {
     return Terms(description: parsedJson['description'][0].toString());
   }
 }
+
+class NetworkException implements Exception {}
