@@ -79,4 +79,4 @@ class Terms {
   }
 }
 
-class NetworkException implements Exception {}
+class SearchResultNotFound implements Exception {}

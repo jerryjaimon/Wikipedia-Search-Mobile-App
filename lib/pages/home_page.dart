@@ -24,19 +24,26 @@ class _HomePageState extends State<HomePage> {
         children: [
           logoAndSearchWidget(),
           BlocConsumer<SearchResultsCubit, SearchResultsState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                if (state is SearchResultsInitial) {
-                  return searchInitialWidget();
-                } else if (state is SearchResultsLoading) {
-                  return searchLoadingWidget();
-                } else if (state is SearchResultsLoaded) {
-                  pageList = state.pages.page;
-                  return searchLoadedWidget();
-                } else {
-                  return searchInitialWidget();
-                }
-              }),
+              listener: (context, state) {
+            if (state is SearchResultsError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            }
+          }, builder: (context, state) {
+            if (state is SearchResultsInitial) {
+              return searchInitialWidget();
+            } else if (state is SearchResultsLoading) {
+              return searchLoadingWidget();
+            } else if (state is SearchResultsLoaded) {
+              pageList = state.pages.page;
+              return searchLoadedWidget();
+            } else {
+              return searchInitialWidget();
+            }
+          }),
           searchListView(),
         ],
       ),
@@ -87,49 +94,73 @@ class _HomePageState extends State<HomePage> {
     return Container();
   }
 
-  ListView searchListView() {
-    return ListView.builder(
-        itemCount: pageList.length,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(5),
-            child: ElevatedButton(
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Image.network(
-                      pageList[index].thumbnail.source,
-                      width: pageList[index].thumbnail.width.toDouble(),
-                      height: pageList[index].thumbnail.height.toDouble(),
-                    ),
+  Widget searchListView() {
+    return SingleChildScrollView(
+      child: ListView.builder(
+          itemCount: pageList.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: ElevatedButton(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(pageList[index].thumbnail.source),
+                          radius: 30.0,
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              pageList[index].title,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              pageList[index].terms.description,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.white54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(pageList[index].title),
-                        Text(pageList[index].terms.description),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WebViewClass(
+                            title: pageList[index].title,
+                            url:
+                                'https://en.m.wikipedia.org/?curid=${pageList[index].pageid}')),
+                  );
+                },
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(10),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  )),
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WebViewClass(
-                          title: pageList[index].title,
-                          url:
-                              'https://en.m.wikipedia.org/?curid=${pageList[index].pageid}')),
-                );
-              },
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   void submitSearchResults(BuildContext context, String searchQuery) {

@@ -18,7 +18,7 @@ class WikiApi extends StatelessWidget {
       title: 'Wiki Search Application',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       home: BlocProvider(
           create: (BuildContext context) => SearchResultsCubit(SearchResults()),
