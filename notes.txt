@@ -1,2 +1,0 @@
-### Link to generate dart file for json
-https://app.quicktype.io/

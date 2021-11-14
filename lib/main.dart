@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(
                               builder: (context) => WebViewClass(
                                   url:
-                                      'https://en.wikipedia.org/?curid=${pageList[index].pageid}')),
+                                      'https://en.m.wikipedia.org/?curid=${pageList[index].pageid}')),
                         );
                       },
                     ),
