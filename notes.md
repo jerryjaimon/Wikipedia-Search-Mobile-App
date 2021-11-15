@@ -12,5 +12,5 @@
 - Copy link
 - Bookmarks
 
-### Link to generate dart file for json
-https://app.quicktype.io/
+
+https://hrishi445.medium.com/flutter-and-caching-api-data-5fa0bfe07047

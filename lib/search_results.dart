@@ -80,3 +80,5 @@ class Terms {
 }
 
 class SearchResultNotFound implements Exception {}
+
+class CacheDoesntExist implements Exception {}

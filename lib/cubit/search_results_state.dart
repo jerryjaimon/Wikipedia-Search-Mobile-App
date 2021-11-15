@@ -30,7 +30,8 @@ class SearchResultsLoaded extends SearchResultsState {
 
 class SearchResultsError extends SearchResultsState {
   final String message;
-  const SearchResultsError(this.message);
+  final bool dismissed;
+  const SearchResultsError(this.message, this.dismissed);
 
   @override
   bool operator ==(Object o) {
@@ -41,4 +42,19 @@ class SearchResultsError extends SearchResultsState {
 
   @override
   int get hashCode => message.hashCode;
+}
+
+class SearchResultsOffline extends SearchResultsState {
+  final PagesList pages;
+  const SearchResultsOffline(this.pages);
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is SearchResultsOffline && o.pages == pages;
+  }
+
+  @override
+  int get hashCode => pages.hashCode;
 }
