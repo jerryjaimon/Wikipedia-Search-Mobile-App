@@ -32,13 +32,16 @@ dependencies:
   cached_network_image: ^3.1.0+1
 
 dev_dependencies:
+  flutter_native_splash: ^1.3.1
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^1.0.0
 
 flutter:
   uses-material-design: true
   assets:
-      - assests/images/wikipedia.png
+      - assets/images/wikipedia.png
 
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/splash.png

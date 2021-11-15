@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
             padding: const EdgeInsets.only(
                 top: 20, bottom: 20, right: 100, left: 100),
-            child: Image.asset('assests/images/wikipedia.png')),
+            child: Image.asset('assets/images/wikipedia.png')),
         Padding(
           padding: const EdgeInsets.all(15),
           child: TextField(
